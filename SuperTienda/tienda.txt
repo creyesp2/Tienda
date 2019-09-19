@@ -1,0 +1,48 @@
+creamos el proyecto completo
+creamos modelo
+creamos el controlador 
+y depues configuramos el nuevo conexion string
+
+configuramos el string de conexion
+habilitar migraciones automaticas
+
+Enable-Migrations -ContextTypeName SuperTiendaContext -EnableAutomaticMigrations
+en el archivo de configuracion agregar la siguiente linea
+   AutomaticMigrationDataLossAllowed = true;
+ en un archivo que se llama global
+agregar la siguiente liena que nos indica que cada vez que arranque verifique si hay modificaciones
+ 
+creamos el modelo tipo documento
+
+creamos el modelo persona
+
+creamos una propiedad con el nombre igual para relacionarlo con la otra tabla
+y en la tabla varios creamos un propiedad de la del otro modelo y tiene que ser  virtual para que no nos de problemas en la base datos
+public virtual TipoDocumento TipoDocumento {get;set;}
+y en la otra tabla para relacionarla debemos crear una propiedad de IColletions<Persona>Personas{get;set}
+vamos a editar las vistas en share en layaut
+
+agregamos anotationes
+[Display(Name="Nombres")]
+[Required(ErrorMessage="Campo Obligatorio")]
+[DisplayFormat(DataFormatString= "0:yyyy/MM/dd",ApplyFormatInEditMode=true)]
+[DataType(DataType.Date)]
+
+[NotMapped]
+public int edad { get { return DateTime.Now.Year - FechaNacimiento.Year; } }
+sobre cargar un metodo para no permitir borrado en cascada ese lo hacemis en el contexto
+ protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
+
+ponemos un try cach en el controlador  de cambios delete de documentos
+  try {
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+

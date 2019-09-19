@@ -1,0 +1,102 @@
+creamos proyecto mvx
+creamos los modelos
+agregamos ala clase modelo el system.componentmodel.dataanotations
+agregamo0s en referncia entity framework
+agregamos controlador
+creamos nueva carpeta ala que le llamamos context
+creamos una carpeta de contexto
+cremaos dentro de la carpeta una clase que va a ser nuestr context
+la clase hay que heredarla de dbContext
+creamos una propiedad de tipo DbSet <Producto>productos{get;set}
+
+en el controlador 
+creamos unna nueva propiedad
+private TiendaContext db= new TiendaContex();
+
+en el action result index(){
+return View(db.Productos.ToList());
+}
+
+AGREGAMOS LA VISTA EN INDEX DE CONTROLLER
+con la clase modelo producto y la clase de context
+CREAMOS EL CREATE EN CONTROLLERS
+EL EL PRIMER //GET PRODUCT CREATE poner
+[HttpGet]
+el primer //post:Producto/create
+public ActionResult Create(Producto producto)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                if(ModelState.IsValid){
+                    db.Productos.Add(producto);
+                    db.SaveChanges();
+                return RedirectToAction("Index");
+                }
+                return View(producto);
+            }
+            catch
+            {
+                return View(producto);
+            }
+        }
+
+en app_start cambiar home por Producto
+nos toca hacer el details agregamos la vista details
+
+get:productodetallisl
+ public ActionResult Details(int ? id)
+        {
+            if(id==null){
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var producto = db.Productos.Find(id);
+            if(producto==null){
+                return HttpNotFound();
+            }
+            
+            return View(producto);
+        }
+
+
+agrregamos edit y nos va servir parte del codigo de details en el get y agregamos la vista
+en el post
+
+public ActionResult Edit(Producto producto)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                if(ModelState.IsValid){
+                    db.Entry(producto).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                return View(producto);
+            }
+            catch
+            {
+                return View(producto);
+            }
+        }
+ahora nos toca agregar el delete
+podemos copiar el codigo del edito
+  if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var producto = db.Productos.Find(id);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(producto);
+agregamos la vista delete
+conectar ala base de datos 
+en el archivo webCOnfig
+
+<connectionStrings>
+    <add name="TiendaContext" connectionString="Data Source=DESKTOP-8F8CQDC\SQLEXPRESS;Initial Catalog=Tienda;Integrated Security=True" providerName="System.Data.SqlClient" />
+  </connectionStrings>
